@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Admin;
 
 import connectKiosk.Query;
@@ -19,70 +18,73 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
  * @author Ian
  */
-public class ReportPanel extends JPanel{
-    
-    
-    
+public class ReportPanel extends JPanel {
+
     private JScrollPane scroll;
-    
+
     private JTable table;
-    
+
     ResultSet res;
-    
-    public ReportPanel(){
-        super(new GridLayout(3, 1));
-        
+
+    public ReportPanel() {
+        super(new MigLayout(
+                "fill", // Layout Constraints
+                "[fill]", // Column constraints
+                "[fill]")); // Row constraints
+
         scroll = new JScrollPane();
-        
+
     }
-    
-    public ReportPanel(Query query) throws SQLException{
-        super(new GridLayout(3, 1));
-        this.setBorder(new EmptyBorder(10, 10, 10, 10) );
+
+    public ReportPanel(Query query) throws SQLException {
+        super(new MigLayout(
+                "fill", // Layout Constraints
+                "[fill]", // Column constraints
+                "[fill]")); // Row constraints
         
+        
+//        this.setBorder(new EmptyBorder(10, 10, 10, 10));
+
         //table = new DefaultTableModel();
-        
         res = query.getTable("visits");
         table = new JTable(buildTableModel(res));
-        
-        scroll = new JScrollPane(table,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
-        add(scroll);
-        
+
+        scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        add(scroll, "push");
+
     }
-    
-    
-    
-    
+
     public static DefaultTableModel buildTableModel(ResultSet rs)
-        throws SQLException {
+            throws SQLException {
 
-    ResultSetMetaData metaData = rs.getMetaData();
+        ResultSetMetaData metaData = rs.getMetaData();
 
-    // names of columns
-    Vector<String> columnNames = new Vector<String>();
-    int columnCount = metaData.getColumnCount();
-    for (int column = 1; column <= columnCount; column++) {
-        columnNames.add(metaData.getColumnName(column));
-    }
-
-    // data of the table
-    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-    while (rs.next()) {
-        Vector<Object> vector = new Vector<Object>();
-        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-            vector.add(rs.getObject(columnIndex));
+        // names of columns
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
         }
-        data.add(vector);
+
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        while (rs.next()) {
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                vector.add(rs.getObject(columnIndex));
+            }
+            data.add(vector);
+        }
+
+        return new DefaultTableModel(data, columnNames);
+
     }
-
-    return new DefaultTableModel(data, columnNames);
-
-}
 }

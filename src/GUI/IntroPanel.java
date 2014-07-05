@@ -11,6 +11,7 @@ import java.net.URL;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -18,11 +19,15 @@ import javax.swing.border.EmptyBorder;
  */
 public class IntroPanel extends JPanel {
 
-    Font font1 = new Font("Book Antiqua", Font.PLAIN, 30);
+    Font font1 = new Font("GillLight", Font.PLAIN, 60);
 
     public IntroPanel() throws MalformedURLException {
+        super(new MigLayout(
+                "", // Layout Constraints
+                "[fill]", // Column constraints
+                "[fill]")); // Row constraints
 
-        JLabel greetings = new JLabel("Welcome to the Disability Resource Center Kiosk");
+        JLabel greetings = new JLabel("Welcome to the Disability Resource Center");
         greetings.setFont(font1);
         setBorder(new EmptyBorder(10, 50, 10, 50) );
         

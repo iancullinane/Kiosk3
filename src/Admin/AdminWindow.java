@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -50,11 +51,13 @@ public class AdminWindow extends JFrame {
         //Specify an action on close
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Create a Border Layout
-        setLayout(new BorderLayout());
+        setLayout(new MigLayout(
+                "debug, fill", // Layout Constraints
+                "[]", // Column constraints
+                "[]")); // Row constraints
         
         
-        conn = new Connect();
-        query = new Query(conn);
+        
         
         title = new JLabel("User Table");
         Border paddingBorder = BorderFactory.createEmptyBorder(10,10,10,10);
@@ -64,15 +67,16 @@ public class AdminWindow extends JFrame {
         
         
         
-        
+        conn = new Connect();
+        query = new Query(conn);
         
         report = new ReportPanel(query);
         test = new TestButtons();
         test.getQuery.addActionListener(new AdminWindow.QueryButtonListener());
             
-        add(title, BorderLayout.NORTH);
-        add(report, BorderLayout.CENTER);
-        add(test, BorderLayout.SOUTH);
+        add(title, "span, wrap");
+        add(report, "wrap");
+        add(test);
         
 
         //set the windows position to the center of the screen

@@ -6,6 +6,7 @@
 package GUI;
 
 import Admin.AdminWindow;
+import connectKiosk.Connect;
 import connectKiosk.RecordControl;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,9 +38,11 @@ public class MainWindow extends JFrame {
     //three panel objects
     private final IntroPanel header;
     final InputPanel input;
+    final NewsPanel news;
     final SubmitPanel submitP;
     
-    //create a record control object to store a new user
+    //create connection objects
+    private Connect conn;
     private RecordControl control;
     
     //listener instance
@@ -52,6 +55,11 @@ public class MainWindow extends JFrame {
 
         //set things like size, close operation, etc
         this.Build();
+        try {
+            this.InitConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         //panel which will hold three panels
         JPanel panel = new JPanel(new MigLayout(
@@ -61,15 +69,22 @@ public class MainWindow extends JFrame {
 
          listener = new SubmitPanelListener();
         
+         
+         
         //initiate the three panels we need for user actions
         header = new IntroPanel();
         input = new InputPanel();
+        news = new NewsPanel();
         submitP = new SubmitPanel(listener);
         
-        
+        header.setBackground(Color.white);
+        input.setBackground(Color.white);
+        news.setBackground(Color.white);
+        submitP.setBackground(Color.white);
         
         panel.add(header, "span, center, aligny bottom, pushy, w 800");
         panel.add(input, "span, center, w 800");
+        panel.add(news, "span, center, w 800");
         panel.add(submitP, "span, center, aligny top, pushy, w 800");
         
         
@@ -87,6 +102,11 @@ public class MainWindow extends JFrame {
         setVisible(true);
         
     }
+    
+    public void InitConnection() throws SQLException{
+        conn = new Connect();
+        control = new RecordControl(conn);
+    }
 
     public void Build() {
         //Display a title
@@ -102,13 +122,20 @@ public class MainWindow extends JFrame {
         //this.setLayout());
     }
     
+    //this method is not used
     public void newUser() throws SQLException{
-        control.newUser(input.getTextFName(), 
-                null, 
-                null, 
-                null, 
-                null, 
-                null);
+        control.newUser(
+                input.getTextFName(), 
+                input.getTextLName(), 
+                input.getEmailField(),
+                input.getPhoneField(), 
+                input.getRoleField());
+    }
+    
+    
+    //TODO: field validation
+    public void validateFields(){
+        
     }
     
  
@@ -119,7 +146,22 @@ public class MainWindow extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if(ae.getSource() == submitP.submit){
-                System.out.println("fuck yeaaaaaaa");
+                try {
+                    control.newUser(
+                            input.getTextFName(),
+                            input.getTextLName(),
+                            input.getEmailField(),
+                            input.getPhoneField(),
+                            input.getRoleField());
+                    control.newVisit(
+                            input.getReasonBox(),
+                            input.getFollowCheck(),
+                            input.getLocationBox(),
+                            input.getEmailField());
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                input.clearFields();
             } else if(ae.getSource() == submitP.close){
                 System.exit(0);
             } else if(ae.getSource() == submitP.admin){

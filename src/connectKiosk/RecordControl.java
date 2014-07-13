@@ -86,7 +86,7 @@ public class RecordControl {
 //    }
     
     //adds a new user, takes all fields as argument
-    public void newUser(String fname, String lname, String email, String description, String phone, String role ) throws SQLException{
+    public void newUser(String fname, String lname, String email, String phone, String role ) throws SQLException{
         boolean found = false;
         query = "SELECT email FROM users";
         ResultSet rs = stmt.executeQuery(query);
@@ -99,16 +99,16 @@ public class RecordControl {
 
         //if that user wasn't in the db continue
         if (found == false) {
-            query = "INSERT INTO USERS (fname, lname, email, description, phone, role) "
+            query = "INSERT INTO USERS (fname, lname, email, phone, role) "
                     + "values "
                     + "('" + fname + "',"
                     + "'" + lname + "',"
                     + "'" + email + "',"
-                    + "'" + description + "',"
                     + "'" + phone + "',"
                     + "'" + role + "');";
 
             stmt.executeUpdate(query);
+            System.out.println("New user added");
         } else {
             System.out.println("User already exists");
         }

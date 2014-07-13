@@ -34,8 +34,8 @@ public class SubmitPanel extends JPanel
         //Create grid layout
         super(new MigLayout(
                 "", // Layout Constraints
-                "[]", // Column constraints
-                "[]")); // Row constraints
+                "[][grow, fill][]", // Column constraints
+                "[center]")); // Row constraints
         
         
         
@@ -45,25 +45,29 @@ public class SubmitPanel extends JPanel
         panel_5 = new JPanel();
       
        //add them to the panel
-        add(panel_1, "center");
+        add(panel_1, "width 50:150:150");
         add(panel_3, "center");
-        add(panel_5, "center");
+        add(panel_5, "width 50:150:150");
         
         
         //create action buttons
         submit = new JButton("Submit");
         submit.setBackground(buttonColor);
         submit.setForeground(textColor);
-        submit.setPreferredSize(new Dimension(100, 50));
+        submit.setPreferredSize(new Dimension(200, 50));
         submit.addActionListener(listen);
         
         
         close = new JButton("Close");
-        close.setPreferredSize(new Dimension(100, 50));
+        close.setBackground(buttonColor);
+        close.setForeground(textColor);
+        close.setPreferredSize(new Dimension(200, 50));
         close.addActionListener(listen);        
         
         admin = new JButton("Administrator");
-        admin.setPreferredSize(new Dimension(100, 50));
+        admin.setBackground(buttonColor);
+        admin.setForeground(textColor);
+        admin.setPreferredSize(new Dimension(200, 50));
         admin.addActionListener(listen);
         
         

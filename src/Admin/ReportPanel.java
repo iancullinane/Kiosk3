@@ -27,42 +27,56 @@ import net.miginfocom.swing.MigLayout;
 public class ReportPanel extends JPanel {
 
     private JScrollPane scroll;
-
     private JTable table;
+    private DefaultTableModel model;
 
     ResultSet res;
 
+    
+    //default constructor with no table data set
+    //adds a blank table to the window
     public ReportPanel() {
         super(new MigLayout(
-                "fill", // Layout Constraints
-                "[fill]", // Column constraints
-                "[fill]")); // Row constraints
-
-        scroll = new JScrollPane();
-
-    }
-
-    public ReportPanel(Query query) throws SQLException {
-        super(new MigLayout(
-                "fill", // Layout Constraints
+                "", // Layout Constraints
                 "[fill]", // Column constraints
                 "[fill]")); // Row constraints
         
-        
-//        this.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        //table = new DefaultTableModel();
-        res = query.getTable("visits");
-        table = new JTable(buildTableModel(res));
-
+        table = new JTable();
         scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        add(scroll, "push");
+        add(scroll, "span, push");
 
     }
 
-    public static DefaultTableModel buildTableModel(ResultSet rs)
+    //constructor that displays a table on creation
+    //THIS CONSRUCTOR CURRENTLY NOT BEING USED
+    public ReportPanel(Query query) throws SQLException {
+        super(new MigLayout(
+                "", // Layout Constraints
+                "[fill]", // Column constraints
+                "[fill]")); // Row constraints
+        table = new JTable(buildTableModel(res));
+        scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scroll, "span, push");
+
+    }
+    
+    //mthod to build a new table, second argument is used to get entire table
+    public void buildTable(Query query, String tableChoice) throws SQLException{
+        
+        //get a query, build a table model, set the new table
+        res = query.getTable(tableChoice);
+        model = this.buildTableModel(res);
+        table.setModel(model);
+
+        
+        
+    }
+    
+    
+    //table model to add data to the table
+    public DefaultTableModel buildTableModel(ResultSet rs)
             throws SQLException {
 
         ResultSetMetaData metaData = rs.getMetaData();
@@ -71,7 +85,9 @@ public class ReportPanel extends JPanel {
         Vector<String> columnNames = new Vector<String>();
         int columnCount = metaData.getColumnCount();
         for (int column = 1; column <= columnCount; column++) {
-            columnNames.add(metaData.getColumnName(column));
+            String tempName = columnNameChecker(metaData.getColumnName(column));
+            
+            columnNames.add(tempName);
         }
 
         // data of the table
@@ -86,5 +102,27 @@ public class ReportPanel extends JPanel {
 
         return new DefaultTableModel(data, columnNames);
 
+    }
+    
+    //method to change column names to more readable format for user
+    //called withing the buildTableMehod
+    //TODO: add if/else for visits table
+    public String columnNameChecker (String name) {
+        String newName = "";
+        
+        if(name.equals("fname")){
+            name = "First Name";
+        } else if(name.equals("lname")){
+            name = "Last Name";
+        } else if(name.equals("email")){
+            name = "Email";
+        } else if(name.equals("Role")){
+            name = "Role";
+        }else if(name.equals("lname")){
+            name = "Last Name";
+        }         
+        
+        return name;
+        
     }
 }

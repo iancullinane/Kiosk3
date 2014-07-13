@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
@@ -35,6 +36,9 @@ public class AdminWindow extends JFrame {
     private ReportPanel report;
     private TestButtons test;
     
+    private JButton userButton;
+    private JButton visitsButton;
+    
     
     private final int WINDOW_WIDTH = 800; //Width
     private final int WINDOW_HEIGHT = 800; //Height
@@ -53,7 +57,7 @@ public class AdminWindow extends JFrame {
         //Create a Border Layout
         setLayout(new MigLayout(
                 "debug, fill", // Layout Constraints
-                "[]", // Column constraints
+                "[fill]", // Column constraints
                 "[]")); // Row constraints
         
         
@@ -70,13 +74,20 @@ public class AdminWindow extends JFrame {
         conn = new Connect();
         query = new Query(conn);
         
-        report = new ReportPanel(query);
-        test = new TestButtons();
-        test.getQuery.addActionListener(new AdminWindow.QueryButtonListener());
+        report = new ReportPanel();
+//        test = new TestButtons();
+        userButton = new JButton("Get Users Table");
+        visitsButton = new JButton("Get Visits Table");
+//        test.getQuery.addActionListener(new AdminWindow.QueryButtonListener());
             
+        userButton.addActionListener(new QueryButtonListener());
+        visitsButton.addActionListener(new QueryButtonListener());
+        
         add(title, "span, wrap");
-        add(report, "wrap");
-        add(test);
+        add(report, "span, wrap");
+//        add(test);
+        add(userButton, "span, wrap");
+        add(visitsButton, "span, wrap");
         
 
         //set the windows position to the center of the screen
@@ -89,25 +100,29 @@ public class AdminWindow extends JFrame {
   {
       public void actionPerformed(ActionEvent e)
       {
-          if (e.getSource() == test.getQuery)
+          if (e.getSource() == userButton)
           {
               try {
                   conn = new Connect();
                   query = new Query(conn);
+                  
+                  report.buildTable(query, "users");
+              
               } catch (SQLException ex) {
                   Logger.getLogger(AdminWindow.class.getName()).log(Level.SEVERE, null, ex);
               }
+        
+          } else if (e.getSource() == visitsButton)
+          {
               try {
-                  query.getTable("visits");
+                  conn = new Connect();
+                  query = new Query(conn);
+                  
+                  report.buildTable(query, "visits");
+              
               } catch (SQLException ex) {
                   Logger.getLogger(AdminWindow.class.getName()).log(Level.SEVERE, null, ex);
               }
-              try {
-                  conn.closeConnect();
-              } catch (SQLException ex) {
-                  Logger.getLogger(AdminWindow.class.getName()).log(Level.SEVERE, null, ex);
-              }
-          }
-      }
+      } 
     }
-}
+}}

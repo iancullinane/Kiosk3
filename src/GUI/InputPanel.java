@@ -96,7 +96,7 @@ public class InputPanel extends JPanel {
 
         //role
         role = new JLabel("Role: ");
-        String[] roles = {"Student", "Teacher", "Parent", "Administrator"};
+        String[] roles = {"","Student", "Teacher", "Parent", "Administrator"};
         roleBox = new JComboBox(roles);
 
         //email
@@ -109,7 +109,7 @@ public class InputPanel extends JPanel {
 
         //reason
         reason = new JLabel("Reason: ");
-        String[] reasons = {"New, Prospective Student/Group", "Disclose and Document Disability (In-take)", "Placement Testing with Accommodation",
+        String[] reasons = {"","New, Prospective Student/Group", "Disclose and Document Disability (In-take)", "Placement Testing with Accommodation",
             "Schedule An Appointment with Disability Specialist", "Meet with a Disability Specialist", "Take Test with Accommodations", "Drop Off/Pick Up Notes",
             "Academic Advising (Course Selection, Add/Drop, Withdrawal)", "Fill Out Accommodation Forms", "Address Problems with Specific Accommodations",
             "Address Specific Course Assignment or Issue", "Alternative Format for Texts and Handouts",
@@ -118,7 +118,7 @@ public class InputPanel extends JPanel {
 
         //location
         location = new JLabel("Location: ");
-        String[] locations = {"Framingham", "Wellesley", "Ashland"};
+        String[] locations = {"","Framingham", "Wellesley", "Ashland"};
         locationBox = new JComboBox(locations);
 
         //follow
@@ -131,6 +131,47 @@ public class InputPanel extends JPanel {
     public String getTextFName(){
         return fNameField.getText();
     }
-        
+
+    public String getTextLName(){
+        return lNameField.getText();
+    }
+    
+    public String getRoleField(){
+        return roleBox.getSelectedItem().toString();
+    }
+    
+    public String getEmailField(){
+        return emailField.getText();
+    }
+    
+    public String getPhoneField(){
+        return phoneField.getText();
+    }
+    
+    public String getReasonBox(){
+        return reasonBox.getSelectedItem().toString();
+    }
+    
+    public String getLocationBox(){
+        return locationBox.getSelectedItem().toString();
+    }
+    
+    public int getFollowCheck(){
+        int value = 0;
+        if(followCheck.isSelected() == true){
+            value = 1;
+        }
+        return value;
+    }
+    
+    public void clearFields(){
+        this.fNameField.setText("");
+        this.lNameField.setText("");
+        this.roleBox.setSelectedIndex(0);
+        this.emailField.setText("");
+        this.phoneField.setText("");
+        this.reasonBox.setSelectedIndex(0);
+        this.locationBox.setSelectedIndex(0);
+    }
 }
 
